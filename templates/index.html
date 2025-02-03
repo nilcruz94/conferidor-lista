@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparar Nomes de Alunos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 1200px; /* Aumentando a largura do container */
+            max-height: 80vh;
+            overflow-y: auto;
+            overflow-x: auto; /* Permite rolagem horizontal caso o texto ultrapasse */
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input[type="file"], select {
+            display: block;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+        ul {
+            padding-left: 0; /* Remove o recuo interno */
+            list-style-type: none; /* Remove as bolinhas da lista */
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Faz com que os itens fiquem empilhados verticalmente */
+        }
+        li {
+            margin-bottom: 10px; /* Ajuste o espaçamento entre as linhas */
+            white-space: nowrap; /* Impede a quebra de linha */
+            word-wrap: normal; /* Não quebra palavras */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Faz com que o texto longo seja cortado com '...' */
+        }
+        h4 {
+            color: #e01717;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Comparar Nomes</h1>
+    
+    <form action="/compare" method="POST" enctype="multipart/form-data">
+        <label for="turma">Escolha a turma para comparar:</label>
+        <select name="turma" id="turma" required>
+            <option value="" disabled selected>Selecione uma turma</option>
+            {% for turma in turmas %}
+                <option value="{{ turma }}">Turma {{ turma }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="excelFile">Selecione o arquivo Excel:</label>
+        <input type="file" name="excel" id="excelFile" accept=".xlsx, .xls" required>
+        
+        <label for="pdfFile">Selecione o PDF da turma:</label>
+        <input type="file" name="pdf" id="pdfFile" accept=".pdf" required>
+        
+        <button type="submit">Comparar Nomes</button>
+    </form>
+
+    {% if error %}
+        <div class="result">
+            <p><strong>{{ error }}</strong></p>
+        </div>
+    {% endif %}
+    
+    {% if only_in_excel or only_in_pdf %}
+        <div class="result">
+            {% if only_in_excel %}
+                <h4>Nomes na Lista Piloto, mas não no SED:</h4>
+                <ul>
+                    {% for name in only_in_excel %}
+                        <li>{{ name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% if only_in_pdf %}
+                <h4>Nomes no SED, mas não na Lista Piloto:</h4>
+                <ul>
+                    {% for name in only_in_pdf %}
+                        <li>{{ name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if divergencias %}
+        <h3>Divergências Encontradas:</h3>
+        <ul>
+            {% for divergencia in divergencias %}
+                <li>{{ divergencia }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhuma divergência encontrada.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
