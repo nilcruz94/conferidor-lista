@@ -8,6 +8,8 @@ from unidecode import unidecode  # Importando a função para remover acentuaç�
 import subprocess
 
 app = Flask(__name__)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
 
 # Define as turmas fora das funções
 turmas = [f"{i}{j}" for i in range(2, 6) for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G']]
