@@ -15,4 +15,4 @@ RUN apt-get update && apt-get install -y python3 python3-pip
 RUN pip3 install -r requirements.txt  # Se necessário, use o seu arquivo requirements.txt
 
 # Comando para rodar o seu código Python com o Flask e o Tabula
-CMD ["sh", "-c", "java -jar tabula.jar & python3 /app/app.py"]
+CMD ["sh", "-c", "java -jar tabula.jar & python3 /app.py"]
