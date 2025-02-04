@@ -14,7 +14,7 @@ EXPOSE 5000
 RUN apt-get update && apt-get install -y python3 python3-pip openjdk-11-jre-headless
 
 # Instalar dependências do Python
-RUN pip3 install -r /requirements.txt
+RUN pip3 install -r /app/requirements.txt
 
 # Comando para rodar o Java e o Flask
-CMD ["sh", "-c", "java -jar /tabula.jar & python3 /app.py"]
+CMD ["sh", "-c", "java -jar /app/tabula.jar & python3 /app/app.py"]
