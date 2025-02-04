@@ -8,8 +8,6 @@ from unidecode import unidecode  # Importando a função para remover acentuaç�
 import subprocess
 
 app = Flask(__name__)
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
 
 # Define as turmas fora das funções
 turmas = [f"{i}{j}" for i in range(2, 6) for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G']]
@@ -145,15 +143,15 @@ def extract_names_and_situations_from_pdf(pdf_file):
     
     return names_and_situations
 
-# Rota para renderizar o template de upload
-@app.route('/')
+@app.route("/")
+@app.route("/index")  # Agora "/index" também funcionará
 def home():
     turmas = []
     for i in range(2, 6):
         for j in ['A', 'B', 'C', 'D', 'E', 'F', 'G']:
-            turmas.append(f"{i}{j}")  # Gera 2A, 2B, 2C, ..., 5G
-    return render_template('index.html', turmas=turmas)  # Envia as turmas de volta para o template
-
+            turmas.append(f"{i}{j}")  # Gera 2A, 2B, ..., 5G
+    return render_template("index.html", turmas=turmas)
+    
 # Rota para comparar as listas e exibir resultados no template
 @app.route('/compare', methods=['POST'])
 def compare_lists():
@@ -241,5 +239,6 @@ def compare_lists():
                            error=None, 
                            turmas=turmas)  # Passa as turmas para o template
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Usa a porta do ambiente ou 5000 por padrão
+    app.run(host='0.0.0.0', port=port)
