@@ -5,8 +5,7 @@ import pandas as pd
 import tabula
 import re  # Importando para usar expressões regulares
 from unidecode import unidecode  # Importando a função para remover acentuação
-
-os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-11-openjdk-amd64"
+import subprocess
 
 app = Flask(__name__)
 
@@ -20,6 +19,24 @@ turma_to_sheet = {
     "4A": 15, "4B": 16, "4C": 17, "4D": 18, "4E": 19, "4F": 20, "4G": 21,
     "5A": 22, "5B": 23, "5C": 24, "5D": 25, "5E": 26, "5F": 27, "5G": 28
 }
+
+def run_java_code():
+    try:
+        # Compilar o código Java
+        subprocess.run(['javac', 'MyJavaApp.java'], check=True)
+        
+        # Executar o código Java
+        result = subprocess.run(['java', 'MyJavaApp'], capture_output=True, text=True, check=True)
+        
+        # Retornar o resultado da execução
+        return result.stdout
+    except subprocess.CalledProcessError as e:
+        return f"Erro ao rodar Java: {e}"
+
+@app.route('/run-java')
+def run_java():
+    java_output = run_java_code()
+    return render_template('index.html', java_output=java_output)
 
 # Função para extrair os nomes do Excel, com base na turma selecionada
 def extract_names_and_observations_from_excel(excel_file, turma):
