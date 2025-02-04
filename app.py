@@ -6,6 +6,8 @@ import tabula
 import re  # Importando para usar expressões regulares
 from unidecode import unidecode  # Importando a função para remover acentuação
 
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-11-openjdk-amd64"
+
 app = Flask(__name__)
 
 # Define as turmas fora das funções
