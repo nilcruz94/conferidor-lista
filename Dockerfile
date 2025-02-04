@@ -22,4 +22,4 @@ RUN apt-get update -y && apt-get install -y \
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Comando para rodar o seu código Python com o Flask e o Tabula
-CMD ["sh", "-c", "java -jar tabula.jar & python3 app.py"]
+CMD ["sh", "-c", "java -jar tabula.jar & python3 /app.py"]
