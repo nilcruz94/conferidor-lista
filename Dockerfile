@@ -1,18 +1,20 @@
-# Use a imagem oficial do Java como base
-FROM openjdk:11-jre-slim
+# Use a imagem oficial do Python como base
+FROM python:3.9-slim
 
-# Defina o diretório de trabalho
+# Defina o diretório de trabalho no container
 WORKDIR /app
 
-# Copie seu código e o arquivo JAR do Tabula para o container
+# Copie o conteúdo da pasta local (onde estão o app.py e tabula.jar) para o diretório /app no container
 COPY . /app
 
 # Exponha a porta que o Flask vai usar
 EXPOSE 5000
 
-# Instalar dependências do Python
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN pip3 install -r requirements.txt  # Se necessário, use o seu arquivo requirements.txt
+# Instalar dependências do sistema e Python
+RUN apt-get update && apt-get install -y python3 python3-pip openjdk-11-jre-headless
 
-# Comando para rodar o seu código Python com o Flask e o Tabula
-CMD ["sh", "-c", "java -jar tabula.jar & python3 /app.py"]
+# Instalar dependências do Python
+RUN pip3 install -r /requirements.txt
+
+# Comando para rodar o Java e o Flask
+CMD ["sh", "-c", "java -jar /tabula.jar & python3 /app.py"]
